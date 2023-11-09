@@ -1,0 +1,133 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb,amsthm,amsfonts} %math
+
+\usepackage{geometry} %page size and margins
+\geometry{headheight=15pt, left=30mm, right=30mm, bottom=3cm, top=3cm}
+\setlength\parindent{0pt} %no indentation
+\setlength\parskip{0.5em} %hspace between par
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{definitions}[theorem]{Definitions}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{examples}[theorem]{Examples}
+
+\newcommand\spans{\mathrm{span}}
+\newcommand\im{\mathrm{im\,}}
+\newcommand\coim{\mathrm{coim\,}}
+\newcommand\coker{\mathrm{coker\,}}
+
+\begin{document}
+    \section{Linear Algebra Review}
+    \subsection{Sources}
+    \begin{itemize}
+        \item Gilbert Strang\begin{itemize}
+                \item Introduction to Linear Algebra (6th edition, 2023)
+                \item MIT video lectures
+        \end{itemize}
+        \item 3b1b
+    \end{itemize}
+    \subsection{Glossary}
+    \begin{tabular}{ll}
+        vector space & -r Vektorraum\\
+        real number & reelle Zahl\\
+        field & -r Körper\\
+        matrix, matrices & -e Matrix, Matrizen\\
+        linearly (in)dependent & linear (un)abhängig\\
+        finite & endlich\\
+        unique & eindeutig\\
+        degree of a polynomial & Grad eines Polynomes\\
+        linear transformation/map/function & -e lineare Transformation/Abbildung/Funktion\\
+        subspace & -r Unterraum\\
+        image & -s Bild\\
+        kernel & -r Kern\\
+        rank & -r Rang\\
+        column & -e Spalte\\
+        row & -e Zeile\\
+        transpose & transponiert
+    \end{tabular}
+    \subsection{Vector spaces}
+    \begin{definition}
+        Let $\mathbf{k}$ be a field. Then, $V$ is a \emph{vector space} over $\mathbf{k}$, if there exist operations $+:V\times V\to V$ and $\cdot:\mathbf{k}\times V\to V$, such that:
+        \begin{itemize}
+            \item $\forall \vec{u},\vec{v}\in V\quad \vec{u}+\vec{v}=\vec{v}+\vec{u}$\hfill Commutativity of $+$
+            \item $\forall \vec{u},\vec{v},\vec{w}\in V\quad (\vec{u}+\vec{v})+\vec{w}=\vec{u}+(\vec{v}+w)$\hfill Associativity of $+$
+            \item $\exists \vec{0}\in V\ \forall \vec{v}\in V\quad \vec{v}+\vec{0}=\vec{v}$\hfill Identity element of $+$
+            \item $\forall \vec{v}\in V\ \exists \vec{u}\in V\quad \vec{v}+\vec{u}=0$\hfill Inverse elements of $+$ 
+            \item $\forall a,b\in \mathbf{k}\ \forall \vec{v}\in V\quad (ab)\cdot\vec{v}=a\cdot(b\cdot\vec{v})$\hfill Compatibility of $\cdot$
+            \item $\forall \vec{v}\in V\quad 1_{\mathbf{k}}\cdot\vec{v}=\vec{v}$\hfill left Identity element of $\cdot$
+            \item $\forall a,b\in\mathbf{k}\ \forall \vec{v}\in V\quad (a+b)\cdot\vec{v}=a\cdot\vec{v}+b\cdot\vec{v}$\hfill left Distributivity of $\cdot$
+            \item $\forall a\in\mathbf{k}\ \forall \vec{u},\vec{v}\in V\quad a\cdot(\vec{u}+\vec{v})=a\cdot\vec{u}+a\cdot\vec{v}$\hfill right Distributivity of $\cdot$
+        \end{itemize}
+    \end{definition}
+    \begin{definition}
+        Let $V$ be a vector space over $\mathbf{k}$, with $\dim_{\mathbf{k}}(V)=n<+\infty$. Then, $\mathcal{B}=(\vec{e}_1,\ldots,\vec{e}_2)\in V^n$ is a \emph{basis} of $V$, if for every $\vec{v}\in V$ there exist unique $a_1,\ldots,a_n\in\mathbf{k}$, such that $\vec{v}=a_1\vec{e}_1+\cdots+a_n\vec{e}_n$. This means that:\begin{itemize}
+            \item $\spans\{\vec{e}_1,\ldots,\vec{e}_n\}=V$
+            \item $\vec{e}_1,\ldots,\vec{e}_n$ are linearly independent
+        \end{itemize}
+    \end{definition}
+    \begin{definition} Let $V$ be a vector space over $\mathbf{k}$, with $\dim_{\mathbf{k}}(V)=n$ and let $\mathcal{B}=(\vec{e}_1,\ldots,\vec{e}_n)$ be a basis of $V$. Then, for every $\vec{v}\in V$, denote by $[\vec{v}]_{\mathcal{B}}\in\mathbf{k}^n$ the unique tuple $(a_1,\ldots,a_n)^t$ such that $[\vec{v}]_{\mathcal{B}}=(a_1,\ldots,a_n)^t$, where $\vec{v}=a_1\vec{e}_1+\cdots+a_n\vec{e}_n$.
+    \end{definition}
+    \begin{examples} A vector space must always be closed under addition and multiplication with a scalar.
+        \begin{itemize}
+            \item $\mathbb{R}^n$
+            \item Arrows of the form $\overrightarrow{OA}$ in the plane.
+            \item $\mathbb{C}$ over $\mathbb{R}$, then $\dim_{\mathbb{R}}(\mathbb{C})=2$, since $z=a+bi$ and $zw\in\mathbb{C}$, not relevant for vector spaces.
+            \item $\mathbb{C}$ over $\mathbb{C}$, then $\dim_{\mathbb{C}}(\mathbb{C})=1$.
+            \item $\mathbb{R}^{n\times m}$, then $\dim_{\mathbb{R}}(\mathbb{R}^{n\times m})=nm$. Also multiplication not relevant.
+            \item $\mathbb{R}[x]$, i.e. polynomials in $\mathbb{R}$. They do not have a finite basis. Also multiplication not relevant.
+            \item NOT a vs: Polynomials of degree $=d$, since $p+q$ does not always have degree $=d$.
+            \item $\mathbb{R}[x]_{\leq d}$, i.e. polynomials of degree $\leq d$, then $\dim_{\mathbb{R}}(\mathbb{R}[x]_{\leq d})=d+1$.
+            \item Functions $f:\mathbb{R}\to\mathbb{R}$ of the form $f(x)=c_1e^x+c_2\sin(x)+c_3x^2$.
+            \item images of fixed dimension, music samples of fixed size, ...
+        \end{itemize}
+    \end{examples}
+    \subsection{Linear maps}
+    \begin{definition}
+        Let $V,W$ be two vector spaces over $\mathbf{k}$. Then $f:V\to W$ is a linear map, if:
+        \begin{itemize}
+            \item $\forall \vec{u},\vec{v}\in V\quad f(\vec{u}+\vec{v})=f(\vec{u})+f(\vec{v})$
+            \item $\forall a\in\mathbf{k}\ \forall \vec{v}\in V\quad f(a\cdot\vec{v})=a\cdot f(\vec{v})$
+        \end{itemize}
+    \end{definition}
+    \begin{definition} Let $V,W$ be two vector spaces over $k$, with $\dim_{\mathbf{k}}(V)=n$ and $\dim_{\mathbf{k}}(W)=m$. Moreover, let $\mathcal{B}=(\vec{e}_1,\ldots,\vec{e}_n)$ be a basis of $V$ and $\mathcal{C}$ be a basis of $W$. Then, for every linear map $f:V\to W$, denote by $[f]_{\mathcal{B},\mathcal{C}}=M_{\mathcal{B},\mathcal{C}}\in\mathbf{k}^{m\times n}$ the unique matrix such that:
+        \[[f]_{\mathcal{B},\mathcal{C}}=\Big(\ [f(\vec{e}_1)]_{\mathcal{C}}\ \Big|\ \cdots\ \Big|\ [f(\vec{e}_n)]_{\mathcal{C}}\ \Big)\]
+    \end{definition}
+    \begin{example} Let $f:\mathbb{R}^3\to\mathbb{R}^2$ be the linear matrix with corresponding matrix $M=\begin{pmatrix}-1&1&2\\0&2&3\\\end{pmatrix}\in\mathbb{R}^{2\times 3}$ in the usual bases of $\mathbb{R}^2$ and $\mathbb{R}^3$. This means that
+        \[f\begin{pmatrix}1\\0\\0\\\end{pmatrix}=\begin{pmatrix}-1\\0\\\end{pmatrix},\qquad
+          f\begin{pmatrix}0\\1\\0\\\end{pmatrix}=\begin{pmatrix}1\\2\\\end{pmatrix},\qquad
+          f\begin{pmatrix}0\\0\\1\\\end{pmatrix}=\begin{pmatrix}2\\3\\\end{pmatrix}\]
+    \end{example}
+    and thus
+    \[f\begin{pmatrix}4\\0\\5\\\end{pmatrix}=4f(\vec{e}_1)+0f(\vec{e}_2)+5f(\vec{e}_3)=4\begin{pmatrix}-1\\0\\\end{pmatrix}+0\begin{pmatrix}1\\2\\\end{pmatrix}+5\begin{pmatrix}2\\3\\\end{pmatrix}=\begin{pmatrix}6\\15\\\end{pmatrix}=\begin{pmatrix}-1&1&2\\0&2&3\\\end{pmatrix}\begin{pmatrix}4\\0\\5\\\end{pmatrix}\]
+    \subsection{Four fundamental subspaces}
+    \begin{definitions} Let $f:\mathbb{R}^n\to\mathbb{R}^m$ be a linear function and $M=M(f)\in\mathbb{R}^{m\times n}$, in the usual basis. Moreover, let $\vec{c}_1,\ldots,\vec{c}_n\in\mathbb{R}^m$ be the columns of $M$ and $\vec{r}_1,\ldots,\vec{r}_m\in\mathbb{R}^m$ its rows, i.e.
+        \[M=\begin{pmatrix}|&&|\\\vec{c}_1&\cdots&\vec{c}_n\\|&&|\\\end{pmatrix}
+            =\setlength{\arraycolsep}{1pt}
+            \begin{pmatrix}
+            \textrm{---}&\vec{r}_1\!^t&\textrm{---}\\&\vdots&\\\textrm{---}&\vec{r}_m\!\!\!^t&\textrm{---}\\
+            \end{pmatrix}
+            \setlength{\arraycolsep}{5pt}\]
+        \begin{itemize}
+            \item $\im f=C(M)=\spans\{\vec{c}_1,\ldots,\vec{c}_n\}\subseteq\mathbb{R}^m$ is the \emph{image} of $f$, or the \emph{column space} of $M$.
+            \item $\ker f=N(M)=\big\{\vec{v}\in\mathbb{R}^n:M\vec{v}=\vec{0}\big\}\subseteq\mathbb{R}^n$ is the \emph{kern} of $f$, or the \emph{nullspace} of $M$.
+            \item $\coim f=R(M)=\spans\{\vec{r}_1,\ldots,\vec{r}_n\}\subseteq\mathbb{R}^n$ is the \emph{coimage} of $f$, or the \emph{row space} of $M$.
+            \item $\coker f=\tilde{N}(M)=\big\{\vec{v}\in\mathbb{R}^n:\vec{v}\,^tM=\vec{0}\,^t\big\}\subseteq\mathbb{R}^m$ is the \emph{cokern} of $f$, or the \emph{left nullspace} of $M$.
+        \end{itemize}
+    \end{definitions}
+    \begin{theorem} Let $f:\mathbb{R}^n\to\mathbb{R}^m$, then $\dim\im f+\dim\ker f=n$.
+    \end{theorem}
+    \begin{example} Let $M=\begin{pmatrix}-1&1&3\\0&2&3\\1&1&0\\2&6&6\\\end{pmatrix}\in\mathbb{R}^{4\times3}$. Then:
+        \begin{itemize}
+            \item $C(M)=\spans\left\{\begin{pmatrix}-1\\0\\1\\2\\\end{pmatrix},\begin{pmatrix}1\\2\\1\\6\\\end{pmatrix},\begin{pmatrix}3\\3\\0\\6\\\end{pmatrix}\right\}=\spans\left\{\begin{pmatrix}1\\0\\-1\\-2\\\end{pmatrix},\begin{pmatrix}0\\1\\1\\4\\\end{pmatrix}\right\}\subseteq\mathbb{R}^4$.
+            \item $N(M)=\left\{\begin{pmatrix}x\\y\\z\\\end{pmatrix}\in\mathbb{R}^3:\begin{pmatrix}-1&1&3\\0&2&3\\1&1&0\\2&6&6\\\end{pmatrix}\begin{pmatrix}x\\y\\z\\\end{pmatrix}=\begin{pmatrix}0\\0\\0\\0\\\end{pmatrix}\right\}=\spans\left\{\begin{pmatrix}3\\-3\\2\\\end{pmatrix}\right\}\subseteq\mathbb{R}^3$.
+            \item $R(M)=\spans\left\{\begin{pmatrix}-1\\1\\3\\\end{pmatrix},\begin{pmatrix}0\\2\\3\\\end{pmatrix},\begin{pmatrix}1\\1\\0\\\end{pmatrix},\begin{pmatrix}2\\6\\6\\\end{pmatrix}\right\}=\spans\left\{\begin{pmatrix}2\\0\\-3\\\end{pmatrix},\begin{pmatrix}0\\2\\3\\\end{pmatrix}\right\}\subseteq\mathbb{R}^3$.
+            \item $\tilde{N}(M)=\left\{\begin{pmatrix}x\\y\\z\\w\\\end{pmatrix}\in\mathbb{R}^4:\setlength{\arraycolsep}{2pt}\begin{pmatrix}x&y&z&w\\\end{pmatrix}\setlength{\arraycolsep}{5pt}\begin{pmatrix}-1&1&3\\0&2&3\\1&1&0\\2&6&6\\\end{pmatrix}=\setlength{\arraycolsep}{2pt}\begin{pmatrix}0&0&0\\\end{pmatrix}\setlength{\arraycolsep}{5pt}\right\}=\spans\left\{\begin{pmatrix}1\\-1\\1\\0\end{pmatrix},\begin{pmatrix}2\\-4\\0\\1\\\end{pmatrix}\right\}\subseteq\mathbb{R}^4$.
+        \end{itemize}
+    \end{example}
+
+\end{document}
+
